@@ -1,2 +1,24 @@
 
 /* Your CSS Code here. */
+.speed {
+  background: #efefef;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  border-radius: 50px;
+  overflow: hidden;
+  height: 430px; /* Aligns with the video height */
+  width: 50px;
+}
+
+.speed-bar {
+  width: 100%;
+  background: linear-gradient(-225deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%);
+  text-shadow: 0 0 2px rgba(0,0,0,0.2);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  height: 16.3%; /* Default matching the 1x mark */
+}
