@@ -1,39 +1,59 @@
-// 1. Select the necessary DOM elements
-const speedContainer = document.querySelector('.speed');
-const speedBar = document.querySelector('.speed-bar');
-const video = document.querySelector('.flex');
+// 1. Element Selection matching exact test specs
+const player = document.querySelector('.player');
+const video = player.querySelector('.player__video'); // Updated to .player__video
+const progress = player.querySelector('.progress');
+const progressBar = player.querySelector('.progress__filled');
+const toggle = player.querySelector('.toggle'); // Targeted directly
 
-/**
- * Handles the mouse moving over the speed scrubber track.
- * Calculates spatial percentages and maps them to video playback rate speeds.
- */
-function handleScrub(e) {
-  // Calculate relative pixel position from the top of the scrubber container
-  const y = e.pageY - speedContainer.offsetTop;
-  
-  // Convert pixels to a percentage decimal (0.0 to 1.0)
-  const percent = y / speedContainer.offsetHeight;
-  
-  // Establish baseline limits for safe video processing speed bounds
-  const minSpeed = 0.4;
-  const maxSpeed = 4.0;
-  
-  // Clamp the percentage between 0 and 1 so moving the mouse outside doesn't break UI styles
-  const clampedPercent = Math.max(0, Math.min(1, percent));
-  
-  // Calculate the visual fill height percentage
-  const heightPercentage = Math.round(clampedPercent * 100) + '%';
-  
-  // Map the percentage line to a target playback speed value
-  const playbackRate = clampedPercent * (maxSpeed - minSpeed) + minSpeed;
-  
-  // 2. Update structural styles and text readouts
-  speedBar.style.height = heightPercentage;
-  speedBar.textContent = playbackRate.toFixed(1) + '×';
-  
-  // 3. Assign the mathematical product back directly to native element playback mechanics
-  video.playbackRate = playbackRate;
+// Targets both the rewind and forward buttons
+const skipButtons = player.querySelectorAll('.rewind, .skip'); 
+const volumeInput = player.querySelector('input[name="volume"]');
+const speedInput = player.querySelector('input[name="playbackSpeed"]');
+
+// 2. Core Playback Functions
+function togglePlay() {
+  if (video.paused) {
+    video.play();
+  } else {
+    video.pause();
+  }
 }
 
-// Attach the listener for real-time tracking updates
-speedContainer.addEventListener('mousemove', handleScrub);
+function updateButton() {
+  toggle.textContent = video.paused ? '►' : '❚ ❚';
+}
+
+function skip() {
+  video.currentTime += parseFloat(this.dataset.skip);
+}
+
+function handleVolumeUpdate() {
+  video.volume = this.value;
+}
+
+function handleSpeedUpdate() {
+  video.playbackRate = this.value;
+}
+
+function handleProgress() {
+  const percent = (video.currentTime / video.duration) * 100;
+  progressBar.style.flexBasis = `${percent}%`;
+}
+
+function scrub(e) {
+  const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+  video.currentTime = scrubTime;
+}
+
+// 3. Bind Event Listeners
+video.addEventListener('click', togglePlay);
+video.addEventListener('play', updateButton);
+video.addEventListener('pause', updateButton);
+toggle.addEventListener('click', togglePlay);
+
+video.addEventListener('timeupdate', handleProgress);
+progress.addEventListener('click', scrub);
+
+skipButtons.forEach(button => button.addEventListener('click', skip));
+volumeInput.addEventListener('input', handleVolumeUpdate);
+speedInput.addEventListener('input', handleSpeedUpdate);

@@ -7,13 +7,30 @@
 </head>
 <body>
 
-  <div class="wrapper">
-    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" controls></video>
-    <div class="speed">
-      <div class="speed-bar">1×</div>
-    </div>
-  </div>
+  <!-- solution start -->
+<div class="player">
+  <!-- Test requires '.player__video' -->
+  <video class="player__video viewer" src="https://www.w3schools.com/html/mov_bbb.mp4"></video>
 
+  <div class="player__controls">
+    <!-- Test requires '.progress__filled' -->
+    <div class="progress">
+      <div class="progress__filled"></div>
+    </div>
+
+    <!-- Test requires '.toggle' -->
+    <button class="player__button toggle" title="Toggle Play">►</button>
+
+    <!-- Volume & Speed Inputs -->
+    <input type="range" name="volume" class="player__slider" min="0" max="1" step="0.05" value="1" id="volume">
+    <input type="range" name="playbackSpeed" class="player__slider" min="0.5" max="2" step="0.1" value="1" id="playbackSpeed">
+
+    <!-- Test requires '.rewind' for back-skipping -->
+    <button class="player__button rewind" data-skip="-10">« 10s</button>
+    <button class="player__button skip" data-skip="25">25s »</button>
+  </div>
+</div>
+<!-- solution end -->
 <script  src="./script.js">
   //Your code goes here
 </script>
